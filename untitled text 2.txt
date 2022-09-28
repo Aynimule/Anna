@@ -1,0 +1,247 @@
+Agenda
+Integration (VCM)
+
+Meeting Notes
+Understanding VCM and how we will connect
+
+Purpose of VCM
+
+Confirm - vendor master data coming from Yardi, contracts coming from VCM (possibly also some supplemental vendor data)?
+
+VCM updating data from Yardi regarding the Vendors.
+
+No transactions on vendors on VCM, stand alone, read only copy in VCM
+
+Copy of vendors from Yardi on VCM, able to see if insurance is expired. Stop from making contract based on data in VCM. (Copy of Vendor information in VCM)
+
+VCM have copy of contract, process and doc uploaded by maintenance team. Notification if contract will expire in 30 days within VCM. Holding final contract. 
+
+VCM automates whole process of creating a contract. 
+
+Not modifying Data from Yardi on Vendor. Contract related data only.
+
+Phase 1 of VCM roll out- lets say we have 50 data points on contract, maybe there will be extension. Potentially include more data points 
+
+Any other data coming from VCM?
+
+Confirm connection is one-way (VCM to Salesforce, nothing the other way)
+
+Correct. 
+
+Review any documentation on VCM 
+
+Copy of HMC VCM | Lucidchart
+
+File updates are COMC or COMM uploading files into VCM, but these could turn into fields, these are the points where data is consumed into VCM. 
+
+Green - Signed by both vendor
+
+Includes contract end date. 
+
+Future, more metadata from contract. 
+
+Possibility for future phase - change from pull to push model, if data needs to be pulled into SF, integration point they could interact with. Potential for pull model at file upload sections. Designing the push to have it designed out. Potentially establish the connection. Action Item for SD: Look at on FMZ end
+
+VCM Manual 1.0 DRAFT.pdf
+
+Identify External IDs
+
+Unique ID for contracts
+
+Yes, Contract ID (unique ID is on every contract, ID is based on location/cost center code-GL code-Year-123 or ABC) Be able to leverage/decode the ID for Contracts to pull info that we may not have. 
+
+Unique ID for vendors to match to Yardi master data
+
+Yes, Vendor ID is same ID in Yardi
+
+Confirm what data is required to be pulled into SF
+
+Is this Vendor ready to work? Contract in place and vendor shield not shut them down?
+
+Contracted pricing per GL account
+
+Drive PO conversations.
+
+Certain categories of WO will have hard coded GL Accounts?
+
+No. 
+
+How will we identify in Sf that particular vendor has a particular contract needs to do a specific type of work?
+
+Identifying Vendors – skills based. Not pulled from contract.
+
+Vender Shield has categories for vendors --- same contract could span multiple GLs and multiple WO. 
+
+Option for COMM or COMC that they get to select the Vendor in Salesforce. Don’t meet categories are grayed out. 
+
+Build Vendor info in SF from Yardi and VCM, could skill mgmt be updated as needed by Christian. 
+
+FMZ would pull in Vendor data in yardi and supplement in SF. 
+
+COMM and COMC could manage this function at the site level. 
+
+Need dashboard to ensure people at attached to appropriate skills - no. 
+
+VCM - can skills be added during Phase 2? Begin in VCM skills mgmt? 
+
+WO are broad and may need electrician on plumbing WO
+
+In VCM, identify 10 skills of each contractor?
+
+Vendor shield information? no
+
+How do we tie a skill set to a WO? no
+
+Don’t track skill sets are they available for COMs or Not.
+
+Action Item: Need to clarify conversation on skill management with Mike (Crisha)
+
+Understand how much data will be pulled
+
+How many vendors / vendor contracts do they have?
+
+Contracts - 10-12 base contracts for every location, several one offs throughout the year. 700-800, sub-1000 
+
+Data dump initially. 
+
+How often are they be updated?
+
+Volume? Base (core) Contracts are good from 1-3 years and don’t change (vendors that do work day in and day out (pricing agreements)). Some contracts can be open 3-6 months. Clear starts and end dates. Don’t get updated once they are issued. Unless CO. 
+
+How quickly do changes need to be made? 
+
+Volume is centered around December due to Base contracts because they end Dec. 
+
+Activate a new contract and need to use immediately as a WO in SF?
+
+Not a lot but possible. 
+
+Vendor exception process – need that ability as well. 
+
+Policy or process for 1 time use
+
+Action Item: Vendor Exception Process. (Crisha)
+
+Not in Vendor shield. 
+
+Assigned WO and PO then override expires. 
+
+Discuss requirements: Integrate vendors with valid Contracts with Yardi Vendor Record. Vendor must be compliant in Yardi (No Stop PO flag) and have current insurance expiration dates
+
+What expectations do you have for keeping records in sync?
+
+Daily / hourly / etc. ?
+
+Nightly MAY be efficient, but there may be exceptions. 
+
+Is it possible that a newly entered / approved contract in VCM would be nearly-immediately used for a WO?
+
+Near-real time integration? If low volume, may be an option.
+
+Investigate further, after more info on exception process. 
+
+Any way to know what records have been updated? Or pull everything and figure it out on SF end (may depend on volume)
+
+When is reaches 100% it reaches a final contract. 
+
+Ravi can include this in the API with contract expire date. 
+
+Understand connection method
+
+Information for the meeting from Ravi:
+
+So, there are two sets of APIs.
+
+Internal APIs for the functioning of the application
+
+Public APIs (protected by a API Key) - This will be the set of APIs SF will have access to
+
+Ravi will be sharing the API Technical Documentation for the Public APIs. I want SF input on what data they would like to include as a part of the API response.
+
+Once we discuss the data points that Business ways then open up end point for consumption. 
+
+SF can access under public APIs
+
+Action Item: Access to API Key (Ravi) Crisha. 
+
+Initial data load
+
+We will need API that would return to us a list of contracts that have changed or new contracts:
+
+Vendor (unique identifier)
+
+Pricing Agreement (rate)
+
+Contract is Active 
+
+Contract Number
+
+Option 1: Would be great if API would return to us what is changed and new. Is this feasible? 
+
+Option 2: Can it send all to us and compare to what we have and accept and append to what we have? 
+
+Push option - if we established a messaging queue, can Mulesoft orchestrate this? Ideal route. It doesn’t append. 
+
+Built messaging queue for VCM – leverage AWS, SNS, then we can just use that. Verify that Mulesoft will work with Messaging system - Action item for FMZ Testing purposes can have API connections can be active and leverage as a fail safe. 
+
+Open up API with data points. 
+
+This would be near real time as well. 
+
+Work on versions of data together as well. 
+
+Discuss APIs
+
+Confirm authentication method (public API accessible w/ API key)
+
+Look at public APIs available with typical responses
+
+Confirm with business that responses have all of the data we need to pull into SF
+
+How many records are the Rest APIs designed to handle (are APIs bulkified)?
+
+Question from Ravi “What is an estimate for the incoming traffic to the REST APIs?”
+
+May vary depending on volume of vendors / timeframe for keeping records in sync
+
+User Provisioning as it relates to VCM
+
+What data in VCM is needed to set up users in Salesforce?
+
+Disregard this question. 
+
+Already have Action Item on Fortimize Access to Yardi for John and Ayna - but will also need access to VCM (API key). 
+
+Yardi form has been received
+
+John and Ayna will return to Ashley by 3 pm ET tomorrow and Ashley will return both to Crisha. 
+
+Ravi will need to build API first, need API key (just backend), and need messaging information. 
+
+We have two environments: Staging and Production
+
+Work with Jared & Mike on Skill Management (Crisha)
+
+Alignment of Legend Site Level Chart to Level 1,2,3,4,5 by Tuesday 9/27
+
+Ravi Oct 16 high level design (Crisha)
+
+ 
+
+Action Items
+
+@Ashley Hayes return Yardi access forms to Crisha by COB Friday 9/23
+
+@Ashley Hayes Possibility for future phase - change from pull to push model, if data needs to be pulled into SF, integration point they could interact with. Potential for pull model at file upload sections. Designing the push to have it designed out. Potentially establish the connection. Action Item for SD: Look at on FMZ end
+
+@Crisha Kamphorst  Need to clarify conversation on skill management with Jared & Mike
+
+@Crisha Kamphorst Vendor Exception Process. 
+
+@Crisha KamphorstAccess to API Key (Ravi)
+
+@Ashley Hayes Built messaging queue for VCM – leverage AWS, SNS, then we can just use that. Verify that Mulesoft will work with Messaging system - Action item for FMZ Testing purposes can have API connections can be active and leverage as a fail safe. 
+
+@Crisha Kamphorst Alignment of Legend Site Level Chart to Level 1,2,3,4,5 by Tuesday 9/27
+
+@Crisha Kamphorst Ravi Oct 16 high level design
